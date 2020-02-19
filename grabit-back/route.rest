@@ -1,0 +1,28 @@
+GET http://localhost:5000/users/getCurrentUser
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjMwMzQzNjQ0NDA5MDI5LCJpYXQiOjE1ODIwNDQwMTV9.LbvcnQckJg-ClHq3AwcDLDoaBNYWXXAAKn1YLFZ_RZE
+
+###
+
+DELETE  http://localhost:3000/subscribers/5e457fa93df4632cfc027d91
+
+###
+
+POST http://localhost:5000/users/auth
+Content-Type: application/json
+
+{
+    "id":630343644409029,
+    "Name":"BAQACH Adil",
+    "image":"https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=630343644409029&height=50&width=50&ext=1584543161&hash=AeSME-5stf0pES7W",
+    "email":"baqachadil@gmail.com",
+    "phone":"0673937060"  
+}
+
+###
+
+PATCH http://localhost:3000/subscribers/5e4577d9dc6aff42b87d8d0c
+Content-Type: application/json
+
+{
+    "subscribeTo":"TraversyMedia"
+}

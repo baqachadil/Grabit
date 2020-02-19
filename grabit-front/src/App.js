@@ -1,10 +1,8 @@
 import React from 'react';
-import './App.css';
+import Navbar from './components/Nav-bar-Component'
 
 function App() {
-  return (
-    
-  );
+    return <Navbar />;
 }
 
 export default App;
