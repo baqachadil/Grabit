@@ -1,0 +1,69 @@
+<div className={classes.root}>
+      
+    <AppBar style={{minWidth : '350px'}} position="static">
+      <Toolbar>        
+        <img alt='GrabitLogo' src="/static/GrabitLogo.png"/>
+        <Typography variant="h6" className={classes.title}>
+          
+        </Typography>
+        {auth && (
+          <div>
+          <Grid container spacing={0}>
+            <Grid item xs={6} sm={6} lg={6}>
+              <span >Hello, {currentUser?.name}</span>
+            </Grid>
+            <Grid item xs={6} sm={6} lg={6}>
+              <Avatar style={{cursor: 'pointer'}} onClick={handleMenu} alt={currentUser?.name} src={currentUser?.image} />
+            </Grid>
+          </Grid>                            
+            <Menu
+              id="menu-appbar"
+              getContentAnchorEl={null}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={open}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={onLogOut}>LogOut</MenuItem>
+            </Menu>
+          </div>
+        )}
+        {!auth && 
+          <div>
+        <Button  color="inherit" onClick={handleOpenModal}>
+          Login
+        </Button>
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          className={classesModal.modal}
+          open={opened}
+          onClose={handleCloseModal}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={opened}>
+            <div className={classesModal.paper}>
+              <FacebookAuth componentClicked={componentClicked} responseFacebook={responseFacebook} />
+            </div>
+          </Fade>
+        </Modal>
+      </div>
+        } 
+      </Toolbar>
+    </AppBar>  
+      
+     
+  </div>

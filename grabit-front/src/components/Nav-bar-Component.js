@@ -1,17 +1,11 @@
 import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import FacebookAuth from './facebook-Component';
 import axios from 'axios'
@@ -52,6 +46,7 @@ export default function MenuAppBar() {
   const [opened, setOpened] = React.useState(false);
   const [token, setToken] = React.useState()
   const [currentUser, setcurrentUser] = React.useState()
+  const background = '/static/headerImg.png'
   
   useEffect(() => {
     if(typeof currentUser === 'undefined'){
@@ -97,6 +92,7 @@ export default function MenuAppBar() {
   }
 
     const responseFacebook = async data =>{
+      console.log("connecting to fb ....")
         const user = {
             id: data.id,
             Name: data.name,
@@ -122,72 +118,78 @@ export default function MenuAppBar() {
   };
 
   return (
-    <div className={classes.root}>
-      
-      <AppBar style={{minWidth : '350px'}} position="static">
-        <Toolbar>        
-          <img alt='GrabitLogo' src="/GrabitLogo.png"/>
-          <Typography variant="h6" className={classes.title}>
-            Grabit
-          </Typography>
-          {auth && (
-            <div>
-            <Grid container spacing={0}>
-              <Grid item xs={6} sm={6} lg={6}>
-                <span >Hello, {currentUser?.name}</span>
-              </Grid>
-              <Grid item xs={6} sm={6} lg={6}>
-                <Avatar style={{cursor: 'pointer'}} onClick={handleMenu} alt={currentUser?.name} src={currentUser?.image} />
-              </Grid>
-            </Grid>                            
-              <Menu
-                id="menu-appbar"
-                getContentAnchorEl={null}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={onLogOut}>LogOut</MenuItem>
-              </Menu>
+    <Grid container justify='center' spacing={2} style={{height: '650px', backgroundImage: `url(${background})`,backgroundPosition:'center', backgroundRepeat: 'no-repeat', padding:'60px' }}  alignItems="flex-start">
+      <Grid item xs={1}></Grid>
+      <Grid item xs={3}>
+        <img alt='GrabitLogo' src="/static/GrabitLogo.png"/>
+      </Grid>
+      <Grid item xs={6}></Grid>
+      <Grid item xs={2}>
+      {auth ? 
+                <div>
+                  <img style={{cursor: 'pointer', borderRadius: '100%'}} onClick={handleMenu} alt={currentUser?.name} src={currentUser?.image}/>                  
+                  <Menu
+                    id="menu-appbar"
+                    getContentAnchorEl={null}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={open}
+                    onClose={handleClose}
+                  >
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={onLogOut}>LogOut</MenuItem>
+                </Menu>
+                </div> 
+                :
+                <div>
+                  <Button onClick={handleOpenModal} style={{backgroundColor: 'red', color: 'white', marginTop: '5px', minWidth: '70px', width: '100px'}}>Sign in</Button>
+                  <Modal
+                      aria-labelledby="transition-modal-title"
+                      aria-describedby="transition-modal-description"
+                      className={classesModal.modal}
+                      open={opened}
+                      onClose={handleCloseModal}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{timeout: 500,}}
+                  >
+                  <Fade style={{ borderRadius: '3%', textAlign: 'center'}} in={opened}>
+                    <div className={classesModal.paper}>
+                      <h3>Sign in</h3>
+                      <hr />
+                      <FacebookAuth componentClicked={componentClicked} responseFacebook={responseFacebook} />
+                    </div>
+                  </Fade>
+                </Modal>
+              </div>                
+              } 
+      </Grid>
+      <Grid item xs={12} style={{textAlign: 'center'}}>
+            <span style={{color: 'white', fontSize: '60px', margin: 'auto', fontFamily :'Montserrat'}}>
+              we <i><b>deliver</b></i> it to your <b>door</b> within <br/>
+              <b>one hour</b>
+            </span>
+      </Grid>
+      <Grid item xs={4}>
+            <div style={{  height:'80px', border: '1px white solid', borderRadius:'3%', padding:'30px'}}>
+                <img src="/static/helmet.png" style={{top: '10px',left: '10px' }} />
+                <h4 style={{color:'white', fontFamily:'Montserrat'}}>sign up as Driver</h4>
             </div>
-          )}
-          {!auth && 
-            <div>
-      <Button  color="inherit" onClick={handleOpenModal}>
-        Login
-      </Button>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classesModal.modal}
-        open={opened}
-        onClose={handleCloseModal}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={opened}>
-          <div className={classesModal.paper}>
-            <FacebookAuth componentClicked={componentClicked} responseFacebook={responseFacebook} />
-          </div>
-        </Fade>
-      </Modal>
-    </div>
-          } 
-        </Toolbar>
-      </AppBar>
-    </div>
+      </Grid>
+      <Grid item xs={4}>
+            <div style={{  height:'80px', border: '1px white solid', borderRadius:'3%', padding:'30px'}}>
+                <img src="/static/user.png" style={{top: '10px',left: '10px' }} />  
+                <h4 style={{color:'white', fontFamily:'Montserrat'}}>sign up as Customer</h4>          
+            </div>
+      </Grid>
+    </Grid>
   );
 }
