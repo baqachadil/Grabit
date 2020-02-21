@@ -1,56 +1,79 @@
-var express = require('express')
-var router = express.Router()
-const User = require('../Models/User')
-const jwt = require('jsonwebtoken')
+var express = require("express");
+var router = express.Router();
+const User = require("../Models/User");
+const jwt = require("jsonwebtoken");
 
+router.post("/signin", async (req, res) => {
+  let user;
+  try {
+    user = await User.findOne({
+      id: req.body.user.id,
+      typeUser: req.body.type
+    });
+    if (!user) {
+      res.status(404).json({ message: "User not signed up" });
+    } else {
+      const { id } = user;
+      jwt.sign({ id }, "Adil0122", (err, token) => {
+        if (err) res.status(500).json({ error: err.message });
 
-router.post('/auth', async (req, res) => {
-    let user
-    try {
-        user = await User.findOne({id: req.body.id})
-        if (! user) {
-            user = new User({...req.body})
-        }
-
-        await user.save()
-
-        const {id} = user
-        jwt.sign({id}, "Adil0122", (err, token) => {
-            if (err) 
-                res.status(500).json({error: err.message})
-            
-            res.status(200).json({token})
-        })
-
-    } catch (err) {
-        res.status(400).json({error: err.message})
+        res.status(200).json({ token });
+      });
     }
-})
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
-const validateToken = (req, res, next) => {
-    const auth = req.headers['authorization'];
-    
-    if(typeof auth !== 'undefined'){
-        const bearer = auth.split(' ')
-        const token = bearer[1]
-        req.token = token
-        next()
-    }else{
-        res.status(400).json({message: "Forbiden"})
-    }    
-}
+router.post("/signup", async (req, res) => {
+  let user;
+  try {
+    user = await User.findOne({
+      id: req.body.user.id,
+      typeUser: req.body.type
+    });
+    if (!user) {
+      let type = { typeUser: req.body.type };
+      console.log(type);
+      user = new User({ ...req.body.user, ...type });
+    }
 
-router.get('/getCurrentUser', validateToken, async (req, res) => {
-    let user
+    console.log(user.typeUser);
+    await user.save();
 
+    const { id } = user;
+    jwt.sign({ id }, "Adil0122", (err, token) => {
+      if (err) res.status(500).json({ error: err.message });
+
+      res.status(200).json({ token });
+    });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+const validateToken = async (req, res, next) => {
+  const auth = req.headers["authorization"];
+
+  if (typeof auth !== "undefined") {
+    const bearer = auth.split(" ");
+    const token = bearer[1];
+    req.token = token;
     await jwt.verify(req.token, "Adil0122", async (err, authData) => {
-        if(err){
-            res.status(400).json({message: err.message})
-        }
+      if (err) {
+        res.status(400).json({ message: err.message });
+      }
+      next();
+    });
+  } else {
+    res.status(400).json({ message: "Forbiden" });
+  }
+};
 
-        user = await User.findOne({id: authData.id})
-        res.status(200).json(user)
-    })
-})
+router.get("/getCurrentUser", validateToken, async (req, res) => {
+  let user;
+  user = await User.findOne({ id: authData.id });
+  res.status(200).json(user);
+});
 
-module.exports = router
+module.exports = router;

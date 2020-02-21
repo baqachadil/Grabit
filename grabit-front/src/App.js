@@ -1,8 +1,8 @@
-import React from 'react';
-import Navbar from './components/Nav-bar-Component'
+import React from "react";
+import Navbar from "./components/landing-page/header/Header";
 
 function App() {
-    return <Navbar />;
+  return <Navbar />;
 }
 
 export default App;

@@ -15,7 +15,7 @@ Content-Type: application/json
     "Name":"BAQACH Adil",
     "image":"https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=630343644409029&height=50&width=50&ext=1584543161&hash=AeSME-5stf0pES7W",
     "email":"baqachadil@gmail.com",
-    "phone":"0673937060"  
+    "phone":"0673937060"
 }
 
 ###
@@ -25,4 +25,14 @@ Content-Type: application/json
 
 {
     "subscribeTo":"TraversyMedia"
+}
+
+###
+
+POST http://localhost:5000/users/signin
+Content-Type: application/json
+
+{
+    "user":{"id": 3456789765435},
+    "type": "Customer"
 }
