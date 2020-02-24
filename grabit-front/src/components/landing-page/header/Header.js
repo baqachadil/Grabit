@@ -9,9 +9,8 @@ import headerBg from "../../../assets/images/headerImg.png";
 import helmet from "../../../assets/images/helmet.png";
 import user from "../../../assets/images/user.png";
 import arrow from "../../../assets/images/arrow.png";
-import Body from "../Body/body";
-import Footer from "../footer/footer";
 import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -97,6 +96,7 @@ export default function MenuAppBar() {
   const [openedDriver, setOpenedDriver] = React.useState(false);
   const [openedCustomer, setOpenedCustomer] = React.useState(false);
   const [token, setToken] = React.useState();
+  let history = useHistory();
 
   useEffect(() => {
     if (localStorage.getItem("JwtToken")) {
@@ -106,12 +106,6 @@ export default function MenuAppBar() {
       setAuth(false);
     }
   }, [token]);
-
-  const onLogOut = () => {
-    setAuth(false);
-    setToken("");
-    localStorage.removeItem("JwtToken");
-  };
 
   const SignInDriver = async data => {
     const user = {
@@ -151,6 +145,7 @@ export default function MenuAppBar() {
         localStorage.setItem("JwtToken", res.data.token);
         setToken(res.data.token);
         setAuth(true);
+        history.push("/dashboard/profile");
       })
       .catch(err => {
         if (err.response.status === 404) {
@@ -276,9 +271,6 @@ export default function MenuAppBar() {
           </Grid>
         )}
       </Grid>
-      <Body></Body>
-
-      <Footer></Footer>
     </>
   );
 }

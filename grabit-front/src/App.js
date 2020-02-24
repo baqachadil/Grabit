@@ -1,8 +1,8 @@
 import React from "react";
-import Navbar from "./components/landing-page/header/Header";
+import Router from "./App-router";
 
 function App() {
-  return <Navbar />;
+  return <Router />;
 }
 
 export default App;

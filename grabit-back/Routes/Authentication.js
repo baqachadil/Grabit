@@ -58,11 +58,11 @@ const validateToken = async (req, res, next) => {
   if (typeof auth !== "undefined") {
     const bearer = auth.split(" ");
     const token = bearer[1];
-    req.token = token;
-    await jwt.verify(req.token, "Adil0122", async (err, authData) => {
+    await jwt.verify(token, "Adil0122", async (err, authData) => {
       if (err) {
         res.status(400).json({ message: err.message });
       }
+      req.authData = authData;
       next();
     });
   } else {
@@ -72,7 +72,7 @@ const validateToken = async (req, res, next) => {
 
 router.get("/getCurrentUser", validateToken, async (req, res) => {
   let user;
-  user = await User.findOne({ id: authData.id });
+  user = await User.findOne({ id: req.authData.id });
   res.status(200).json(user);
 });
 
