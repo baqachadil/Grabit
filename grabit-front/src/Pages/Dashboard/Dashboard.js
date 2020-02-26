@@ -33,7 +33,7 @@ export default function Profile() {
 
   return (
     <>
-      <Navbar currentUser={currentUser} onLogOut={onLogOut} />
+      <Navbar currentUser={currentUser} onLogOut={onLogOut} page={"dash"} />
       <Grid container>
         <Grid item xs={4}>
           <SideMenu currentUser={currentUser} />

@@ -145,7 +145,7 @@ export default function MenuAppBar() {
         localStorage.setItem("JwtToken", res.data.token);
         setToken(res.data.token);
         setAuth(true);
-        history.push("/dashboard/profile");
+        history.push("/dashboard/set/profile");
       })
       .catch(err => {
         if (err.response.status === 404) {

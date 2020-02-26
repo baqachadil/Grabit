@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import GrabitLogo from "../../assets/images/GrabitLogo2.png";
 import Path from "../../assets/images/Path.png";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,10 +40,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function NavBar({ currentUser, onLogOut }) {
+export default function NavBar({ currentUser, onLogOut, page }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const history = useHistory();
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -58,9 +60,14 @@ export default function NavBar({ currentUser, onLogOut }) {
         <img alt="GrabitLogo" src={GrabitLogo} />
       </Grid>
       <Grid item xs={6}>
-        <button className={classes.order}>
-          <img alt="Path" src={Path} /> Request an Order
-        </button>
+        {page === "dash" && (
+          <button
+            onClick={() => history.push("/Request")}
+            className={classes.order}
+          >
+            <img alt="Path" src={Path} /> Request an Order
+          </button>
+        )}
       </Grid>
       <Grid item style={{ paddingTop: "20px" }} xs={1}>
         <span>{currentUser?.Name}</span>
