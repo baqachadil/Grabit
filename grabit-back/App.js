@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const AuthRouter = require("./Routes/Authentication");
+const RequestRouter = require("./Routes/Request");
 var cors = require("cors");
 
 var mongoose = require("mongoose");
@@ -17,6 +18,8 @@ db.on("open", () => console.log("Connected to database ..."));
 
 app.use(cors());
 app.use(express.json());
+
 app.use("/users", AuthRouter);
+app.use("/requests", RequestRouter);
 
 app.listen(5000, () => console.log("Server listening on 5000 ..."));

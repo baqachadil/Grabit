@@ -84,7 +84,6 @@ export default function Profile({ currentUser }) {
             <Grid item xs={12}>
               <span className={classes.inputText}>First & Last Name</span>
               <TextField
-                id="outlined-basic"
                 variant="outlined"
                 InputProps={{ className: classes.input }}
                 value={currentUser?.Name}
@@ -93,7 +92,6 @@ export default function Profile({ currentUser }) {
             <Grid item xs={12}>
               <span className={classes.inputText}>E-mail</span> <br />
               <TextField
-                id="outlined-basic"
                 variant="outlined"
                 InputProps={{ className: classes.input }}
                 value={currentUser?.email}
@@ -103,7 +101,6 @@ export default function Profile({ currentUser }) {
               <span className={classes.inputText}>Phone</span>
               <br />
               <TextField
-                id="outlined-basic"
                 variant="outlined"
                 InputProps={{ className: classes.input }}
                 value={currentUser?.phone}

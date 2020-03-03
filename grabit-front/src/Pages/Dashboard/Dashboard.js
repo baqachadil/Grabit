@@ -8,6 +8,7 @@ import axios from "axios";
 
 export default function Profile() {
   const [currentUser, setCurrentUSer] = useState();
+  const [userType, setUserType] = useState();
   let history = useHistory();
 
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function Profile() {
       };
       axios.get("/users/getCurrentUser", config).then(res => {
         setCurrentUSer(res.data);
+        setUserType(localStorage.getItem("UserType"));
       });
     } else {
       history.push("/");
@@ -28,12 +30,18 @@ export default function Profile() {
   const onLogOut = () => {
     setCurrentUSer("");
     localStorage.removeItem("JwtToken");
+    localStorage.removeItem("UserType");
     history.push("/");
   };
 
   return (
     <>
-      <Navbar currentUser={currentUser} onLogOut={onLogOut} page={"dash"} />
+      <Navbar
+        currentUser={currentUser}
+        onLogOut={onLogOut}
+        page={"dash"}
+        userType={userType}
+      />
       <Grid container>
         <Grid item xs={4}>
           <SideMenu currentUser={currentUser} />

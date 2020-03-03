@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const User = require("../Models/User");
 const jwt = require("jsonwebtoken");
+const validateToken = require("../Routes/TokenValidation");
 
 router.post("/signin", async (req, res) => {
   let user;
@@ -17,7 +18,7 @@ router.post("/signin", async (req, res) => {
       jwt.sign({ id }, "Adil0122", (err, token) => {
         if (err) res.status(500).json({ error: err.message });
 
-        res.status(200).json({ token });
+        res.status(200).json({ token: token, type: req.body.type });
       });
     }
   } catch (err) {
@@ -34,41 +35,21 @@ router.post("/signup", async (req, res) => {
     });
     if (!user) {
       let type = { typeUser: req.body.type };
-      console.log(type);
       user = new User({ ...req.body.user, ...type });
     }
 
-    console.log(user.typeUser);
     await user.save();
 
     const { id } = user;
     jwt.sign({ id }, "Adil0122", (err, token) => {
       if (err) res.status(500).json({ error: err.message });
 
-      res.status(200).json({ token });
+      res.status(200).json({ token: token, type: req.body.type });
     });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
-
-const validateToken = async (req, res, next) => {
-  const auth = req.headers["authorization"];
-
-  if (typeof auth !== "undefined") {
-    const bearer = auth.split(" ");
-    const token = bearer[1];
-    await jwt.verify(token, "Adil0122", async (err, authData) => {
-      if (err) {
-        res.status(400).json({ message: err.message });
-      }
-      req.authData = authData;
-      next();
-    });
-  } else {
-    res.status(400).json({ message: "Forbiden" });
-  }
-};
 
 router.get("/getCurrentUser", validateToken, async (req, res) => {
   let user;

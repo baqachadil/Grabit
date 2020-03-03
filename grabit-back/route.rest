@@ -1,5 +1,5 @@
 GET http://localhost:5000/users/getCurrentUser
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjMwMzQzNjQ0NDA5MDI5LCJpYXQiOjE1ODIwNDQwMTV9.LbvcnQckJg-ClHq3AwcDLDoaBNYWXXAAKn1YLFZ_RZE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjMwMzQzNjQ0NDA5MDI5LCJpYXQiOjE1ODI4ODM3ODZ9.RtWzxZGUvyg00piS4hbHPOfPJwQGsIi58TdZTfeop-Y
 
 ###
 
@@ -7,15 +7,23 @@ DELETE  http://localhost:3000/subscribers/5e457fa93df4632cfc027d91
 
 ###
 
-POST http://localhost:5000/users/auth
+POST http://localhost:5000/users/signup
 Content-Type: application/json
 
 {
-    "id":630343644409029,
-    "Name":"BAQACH Adil",
-    "image":"https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=630343644409029&height=50&width=50&ext=1584543161&hash=AeSME-5stf0pES7W",
-    "email":"baqachadil@gmail.com",
-    "phone":"0673937060"
+    "user" : {
+        "_id" : "5e5d10051dac40419c98d2f2",
+        "Name" : "Mouad",
+        "image" : "",
+        "email" : "Mouad@gmail.com",
+        "id" : 630343644409020,
+        "location" : {
+            "type": "Point",
+            "coordinates": [33.996159,-6.852711]
+        },
+        "actif": false
+    },
+    "type" : "Driver"
 }
 
 ###
@@ -36,3 +44,12 @@ Content-Type: application/json
     "user":{"id": 3456789765435},
     "type": "Customer"
 }
+
+###
+
+Post http://localhost:5000/requests/add
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjMwMzQzNjQ0NDA5MDI5LCJpYXQiOjE1ODI4ODM3ODZ9.RtWzxZGUvyg00piS4hbHPOfPJwQGsIi58TdZTfeop-Y
+
+###
+GET http://localhost:5000/requests/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjMwMzQzNjQ0NDA5MDI5LCJpYXQiOjE1ODI4ODM3ODZ9.RtWzxZGUvyg00piS4hbHPOfPJwQGsIi58TdZTfeop-Y

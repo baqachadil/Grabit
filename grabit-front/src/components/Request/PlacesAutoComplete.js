@@ -20,19 +20,19 @@ const useStyles = makeStyles(() => ({
     borderRadius: 4
   },
   suggestion: {
-    border: "1px solid #d4d4d4",
+    border: "none",
     width: 400,
     padding: 10,
-    backgroundColor: "white",
+    backgroundColor: "rgba(53, 54, 58, 0.82)",
+    color: "white",
     cursor: "pointer",
     "&:hover": {
-      border: "1px white solid",
-      backgroundColor: "#F2F2F2"
+      backgroundColor: "rgba(53, 54, 58, 0.45)"
     }
   }
 }));
 
-const PlacesAutocomplete = ({ setMarkers, markerNum, setCenter }) => {
+const PlacesAutocomplete = ({ setMarkers, markerNum, setCenter, error }) => {
   const {
     ready,
     value,
@@ -85,7 +85,6 @@ const PlacesAutocomplete = ({ setMarkers, markerNum, setCenter }) => {
   return (
     <div>
       <TextField
-        id="outlined-basic"
         value={value}
         onChange={handleInput}
         variant="outlined"
@@ -93,6 +92,7 @@ const PlacesAutocomplete = ({ setMarkers, markerNum, setCenter }) => {
         InputProps={{ className: classes.add }}
         placeholder="Your Address"
       />
+      {error !== null && <div style={{ color: "red" }}>{error}</div>}
       {status === "OK" && (
         <div className={classes.sugg}>{renderSuggestions()}</div>
       )}

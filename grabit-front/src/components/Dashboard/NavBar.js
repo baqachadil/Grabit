@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function NavBar({ currentUser, onLogOut, page }) {
+export default function NavBar({ currentUser, onLogOut, page, userType }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -57,15 +57,27 @@ export default function NavBar({ currentUser, onLogOut, page }) {
   return (
     <Grid container justify="center" className={classes.root}>
       <Grid item xs={2}>
-        <img alt="GrabitLogo" src={GrabitLogo} />
+        <img
+          alt="GrabitLogo"
+          src={GrabitLogo}
+          style={{ cursor: "pointer" }}
+          onClick={() => history.push("/")}
+        />
       </Grid>
       <Grid item xs={6}>
         {page === "dash" && (
           <button
-            onClick={() => history.push("/Request")}
+            onClick={() => {
+              userType === "Customer"
+                ? history.push("/Request")
+                : history.push("/Assignements");
+            }}
             className={classes.order}
           >
-            <img alt="Path" src={Path} /> Request an Order
+            <img alt="Path" src={Path} />{" "}
+            {userType === "Customer"
+              ? "Request an Order"
+              : "See your assignements"}
           </button>
         )}
       </Grid>
@@ -96,7 +108,9 @@ export default function NavBar({ currentUser, onLogOut, page }) {
             open={open}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={() => history.push("/dashboard/profile")}>
+              Profile
+            </MenuItem>
             <MenuItem onClick={onLogOut}>LogOut</MenuItem>
           </Menu>
         </div>

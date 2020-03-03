@@ -78,7 +78,10 @@ const useStyles = makeStyles(theme => ({
     color: "white",
     marginTop: "5px",
     minWidth: "70px",
-    width: "60%"
+    width: "60%",
+    "&:hover": {
+      backgroundColor: "#E11111"
+    }
   },
   arrow: {
     float: "right",
@@ -92,6 +95,7 @@ const useStyles = makeStyles(theme => ({
 export default function MenuAppBar() {
   const classes = useStyles();
   const [auth, setAuth] = React.useState();
+  const [isCustomer, setisCustomer] = React.useState(false);
   const [openedSignIn, setOpenedSignIn] = React.useState(false);
   const [openedDriver, setOpenedDriver] = React.useState(false);
   const [openedCustomer, setOpenedCustomer] = React.useState(false);
@@ -102,6 +106,9 @@ export default function MenuAppBar() {
     if (localStorage.getItem("JwtToken")) {
       setAuth(true);
       setToken(localStorage.getItem("JwtToken"));
+      localStorage.getItem("UserType") === "Customer"
+        ? setisCustomer(true)
+        : setisCustomer(false);
     } else {
       setAuth(false);
     }
@@ -143,9 +150,10 @@ export default function MenuAppBar() {
       .post(url, { user, type })
       .then(res => {
         localStorage.setItem("JwtToken", res.data.token);
+        localStorage.setItem("UserType", res.data.type);
         setToken(res.data.token);
         setAuth(true);
-        history.push("/dashboard/set/profile");
+        history.push("/dashboard/profile");
       })
       .catch(err => {
         if (err.response.status === 404) {
@@ -178,7 +186,12 @@ export default function MenuAppBar() {
     <>
       <Grid container justify="center" className={classes.root}>
         <Grid item xs={1} sm={3}>
-          <img alt="GrabitLogo" src={grabitLogo} />
+          <img
+            alt="GrabitLogo"
+            src={grabitLogo}
+            style={{ cursor: "pointer" }}
+            onClick={() => history.push("/")}
+          />
         </Grid>
         <Grid item xs={7} sm={6}></Grid>
         <Grid item xs={4} sm={3} style={{ textAlign: "center" }}>
@@ -216,40 +229,71 @@ export default function MenuAppBar() {
             </i>
           </span>
         </Grid>
-        {!auth && (
-          <Grid item xs={12} sm={4}>
-            <div
-              onClick={() => setOpenedDriver(true)}
-              className={`${classes.signupd}  ${classes.signup}`}
-            >
-              <img alt="helmet" src={helmet} />
+        {!auth ? (
+          <>
+            <Grid item xs={12} sm={4}>
               <div
-                style={{
-                  color: "white",
-                  fontFamily: "Montserrat",
-                  marginTop: "20px",
-                  fontSize: "20px"
-                }}
+                onClick={() => setOpenedDriver(true)}
+                className={`${classes.signupd}  ${classes.signup}`}
               >
-                sign up as Driver
-                <img alt="arrow" src={arrow} className={classes.arrow} />
+                <img alt="helmet" src={helmet} />
+                <div
+                  style={{
+                    color: "white",
+                    fontFamily: "Montserrat",
+                    marginTop: "20px",
+                    fontSize: "20px"
+                  }}
+                >
+                  sign up as Driver
+                  <img alt="arrow" src={arrow} className={classes.arrow} />
+                </div>
               </div>
-            </div>
-            <FacebookAuth
-              type={"Driver"}
-              responseFacebook={SignUp}
-              handleCloseModal={() => setOpenedDriver(false)}
-              opened={openedDriver}
-            />
-          </Grid>
-        )}
-        {!auth && (
-          <Grid item xs={12} sm={4}>
+              <FacebookAuth
+                type={"Driver"}
+                responseFacebook={SignUp}
+                handleCloseModal={() => setOpenedDriver(false)}
+                opened={openedDriver}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
+              <div
+                onClick={() => setOpenedCustomer(true)}
+                className={`${classes.signupc}  ${classes.signup}`}
+              >
+                <img alt="user" src={user} />
+                <div
+                  style={{
+                    color: "white",
+                    fontFamily: "Montserrat",
+                    marginTop: "20px",
+                    fontSize: "20px"
+                  }}
+                >
+                  sign up as Customer
+                  <img alt="arrow" src={arrow} className={classes.arrow} />
+                </div>
+              </div>
+              <FacebookAuth
+                type={"Customer"}
+                responseFacebook={SignUp}
+                handleCloseModal={() => setOpenedCustomer(false)}
+                opened={openedCustomer}
+              />
+            </Grid>
+          </>
+        ) : (
+          <Grid item xs={4}>
             <div
-              onClick={() => setOpenedCustomer(true)}
+              onClick={() => history.push("/dashboard/profile")}
               className={`${classes.signupc}  ${classes.signup}`}
             >
-              <img alt="user" src={user} />
+              {isCustomer ? (
+                <img alt="user" src={user} />
+              ) : (
+                <img alt="helmet" src={helmet} />
+              )}
               <div
                 style={{
                   color: "white",
@@ -258,16 +302,10 @@ export default function MenuAppBar() {
                   fontSize: "20px"
                 }}
               >
-                sign up as Customer
+                Continue To Your profile
                 <img alt="arrow" src={arrow} className={classes.arrow} />
               </div>
             </div>
-            <FacebookAuth
-              type={"Customer"}
-              responseFacebook={SignUp}
-              handleCloseModal={() => setOpenedCustomer(false)}
-              opened={openedCustomer}
-            />
           </Grid>
         )}
       </Grid>
