@@ -284,6 +284,8 @@ export default function Request() {
 
   const renderPolylines = async function(map, maps) {
     var label;
+
+    //Adding a marker to the map
     for (var i = 0; i < markers.length; i++) {
       i === 0 ? (label = "A") : (label = "B");
       var marker = new maps.Marker({
@@ -294,6 +296,7 @@ export default function Request() {
       marker.setMap(map);
     }
 
+    //Adding a path between the two markers
     if (markers.length > 1) {
       var directionsService = new maps.DirectionsService();
       var directionsRenderer = new maps.DirectionsRenderer({
@@ -314,8 +317,11 @@ export default function Request() {
           directionsRenderer.setDirections(result);
           const dist = result.routes[0].legs[0].distance.text;
           const dur = result.routes[0].legs[0].duration.text;
+          //getting the distance between the two markers
           setDistance(dist);
+          //getting the duration between the two markers
           setDuration(dur);
+          //calculating the estimated price of the delivery
           setservicePrice(parseFloat(dist) * parseFloat(Unite_Price_Per_Km));
         }
       });
@@ -346,6 +352,8 @@ export default function Request() {
 
   const submit = function() {
     handleClose();
+
+    //Submitting the new request to the back-end
     var data = {
       delivery_address: markers[1],
       pickup_address: markers[0],

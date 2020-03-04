@@ -103,6 +103,7 @@ export default function MenuAppBar() {
   let history = useHistory();
 
   useEffect(() => {
+    //Getting the user's data
     if (localStorage.getItem("JwtToken")) {
       setAuth(true);
       setToken(localStorage.getItem("JwtToken"));
@@ -140,6 +141,7 @@ export default function MenuAppBar() {
       image: data.picture.data.url
     };
 
+    //Specifie the user's type (Customer, Driver)
     const type = openedCustomer ? "Customer" : "Driver";
     let url = "users/signup";
     sendRequest({ user, type }, url);

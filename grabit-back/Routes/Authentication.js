@@ -3,7 +3,9 @@ var router = express.Router();
 const User = require("../Models/User");
 const jwt = require("jsonwebtoken");
 const validateToken = require("../Routes/TokenValidation");
+require("dotenv").config();
 
+//SignIn
 router.post("/signin", async (req, res) => {
   let user;
   try {
@@ -15,7 +17,7 @@ router.post("/signin", async (req, res) => {
       res.status(404).json({ message: "User not signed up" });
     } else {
       const { id } = user;
-      jwt.sign({ id }, "Adil0122", (err, token) => {
+      jwt.sign({ id }, process.env.TOKEN_SECRET_KEY, (err, token) => {
         if (err) res.status(500).json({ error: err.message });
 
         res.status(200).json({ token: token, type: req.body.type });
@@ -26,6 +28,7 @@ router.post("/signin", async (req, res) => {
   }
 });
 
+//Sign Up
 router.post("/signup", async (req, res) => {
   let user;
   try {
@@ -41,7 +44,7 @@ router.post("/signup", async (req, res) => {
     await user.save();
 
     const { id } = user;
-    jwt.sign({ id }, "Adil0122", (err, token) => {
+    jwt.sign({ id }, process.env.TOKEN_SECRET_KEY, (err, token) => {
       if (err) res.status(500).json({ error: err.message });
 
       res.status(200).json({ token: token, type: req.body.type });
@@ -51,6 +54,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+//Getting signed in user
 router.get("/getCurrentUser", validateToken, async (req, res) => {
   let user;
   user = await User.findOne({ id: req.authData.id });

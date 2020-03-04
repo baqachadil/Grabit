@@ -59,7 +59,7 @@ const PlacesAutocomplete = ({ setMarkers, markerNum, setCenter, error }) => {
         setCenter({ lat, lng });
       })
       .catch(error => {
-        console.log("😱 Error: ", error);
+        console.log("Error: ", error);
       });
   };
 

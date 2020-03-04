@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const AuthRouter = require("./Routes/Authentication");
 const RequestRouter = require("./Routes/Request");
+const NotifRouter = require("./Routes/NotifSubscription");
 var cors = require("cors");
 
 var mongoose = require("mongoose");
@@ -21,5 +22,6 @@ app.use(express.json());
 
 app.use("/users", AuthRouter);
 app.use("/requests", RequestRouter);
+app.use("/notifications", NotifRouter);
 
 app.listen(5000, () => console.log("Server listening on 5000 ..."));
