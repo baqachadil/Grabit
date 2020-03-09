@@ -10,8 +10,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "white"
   },
   head: {
-    padding: 42,
-    fontSize: 25
+    padding: 30,
+    fontSize: 17
   },
   line: {
     height: 1,
@@ -37,7 +37,8 @@ const useStyles = makeStyles(theme => ({
     border: "none",
     borderRadius: 4,
     cursor: "pointer",
-    fontSize: 15
+    fontSize: 15,
+    outline: "none"
   },
   userImg: {
     borderRadius: "100%",

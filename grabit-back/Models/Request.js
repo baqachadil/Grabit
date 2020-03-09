@@ -40,6 +40,10 @@ const RequestSchema = new mongoose.Schema({
   user_Id: {
     type: Schema.Types.ObjectId,
     ref: "User"
+  },
+  driver_id: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
   }
 });
 

@@ -119,7 +119,8 @@ const useStyles = makeStyles(theme => ({
     border: "none",
     borderRadius: 4,
     cursor: "pointer",
-    fontSize: 15
+    fontSize: 15,
+    outline: "none"
   },
   confirm: {
     backgroundColor: "#F71117",
@@ -131,7 +132,8 @@ const useStyles = makeStyles(theme => ({
     border: "none",
     borderRadius: 4,
     cursor: "pointer",
-    fontSize: 15
+    fontSize: 15,
+    outline: "none"
   },
   formControl: {
     margin: theme.spacing(2)
@@ -149,7 +151,8 @@ const useStyles = makeStyles(theme => ({
     padding: 10,
     width: 350,
     height: 280,
-    textAlign: "center"
+    textAlign: "center",
+    outline: "none"
   }
 }));
 
@@ -379,6 +382,7 @@ export default function Request() {
       .then(res => {
         console.log(res);
         setSuccess(true);
+        history.push("/dashboard/requests");
       })
       .catch(err => {
         console.log(err.response);
@@ -395,11 +399,16 @@ export default function Request() {
       <Grid className={classes.root}>
         <Grid container className={classes.Parent}>
           <Grid item xs={12} style={{ padding: 20, fontSize: 25 }}>
-            <span>Request</span>
+            <MouseOver type={"goBack"}></MouseOver>
+            <Grid style={{ textAlign: "center" }}>
+              <span>Request</span>
+            </Grid>
           </Grid>
           <Grid item xs={12} className={classes.line}></Grid>
           <Grid item xs={5} className={classes.items}>
-            <span className={classes.inputText}>Describe your Order</span>
+            <span className={classes.inputText}>
+              Describe your Order (Optional)
+            </span>
             <TextField
               id="orderDescription"
               variant="outlined"
@@ -568,8 +577,6 @@ export default function Request() {
               Request
             </button>
             <Modal
-              aria-labelledby="transition-modal-title"
-              aria-describedby="transition-modal-description"
               className={classes.modal}
               open={open}
               onClose={handleClose}

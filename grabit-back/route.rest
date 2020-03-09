@@ -12,16 +12,17 @@ Content-Type: application/json
 
 {
     "user" : {
-        "_id" : "5e5d10051dac40419c98d2f2",
-        "Name" : "Mouad",
+        "Name" : "Youssef",
         "image" : "",
-        "email" : "Mouad@gmail.com",
-        "id" : 630343644409020,
+        "email" : "Youssef@gmail.com",
+        "id" : 6303436444090211,
         "location" : {
             "type": "Point",
-            "coordinates": [33.996159,-6.852711]
+            "coordinates": [33.999330,-6.844250]
         },
-        "actif": false
+        "actif": true,
+        "assigned": true,
+        "route": [{"lat": 33.937520, "lng": -6.942170}]
     },
     "type" : "Driver"
 }
@@ -52,4 +53,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjMwMzQzNjQ0N
 
 ###
 GET http://localhost:5000/requests/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjMwMzQzNjQ0NDA5MDI5LCJpYXQiOjE1ODI4ODM3ODZ9.RtWzxZGUvyg00piS4hbHPOfPJwQGsIi58TdZTfeop-Y
+
+###
+GET http://localhost:5000/requests/requestDriver/5e6644eb34dc5832f0b5b3f1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjMwMzQzNjQ0NDA5MDI5LCJpYXQiOjE1ODI4ODM3ODZ9.RtWzxZGUvyg00piS4hbHPOfPJwQGsIi58TdZTfeop-Y

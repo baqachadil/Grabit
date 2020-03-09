@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 
 const userShecma = new mongoose.Schema({
   id: {
-    type: Number,
-    unique: true
+    type: Number
   },
   Name: {
     type: String,
@@ -36,8 +35,7 @@ const userShecma = new mongoose.Schema({
     default: false
   },
   route: {
-    type: Array,
-    default: []
+    type: Array
   }
 });
 

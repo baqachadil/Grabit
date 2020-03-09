@@ -156,6 +156,33 @@ export default function MenuAppBar() {
         setToken(res.data.token);
         setAuth(true);
         history.push("/dashboard/profile");
+        if (type === "Driver") {
+          navigator.geolocation.getCurrentPosition(
+            async res => {
+              user.location = {
+                type: "Point",
+                coordinates: [res.coords.latitude, res.coords.longitude]
+              };
+              let config = {
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("JwtToken")
+                }
+              };
+              await axios
+                .post("/users/updateLocation", { user }, config)
+                .then(res => {
+                  console.log(res);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            },
+            err => {
+              console.log(err);
+            },
+            { timeout: 10000 }
+          );
+        }
       })
       .catch(err => {
         if (err.response.status === 404) {

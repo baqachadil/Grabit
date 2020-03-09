@@ -9,9 +9,12 @@ const axios = require("axios");
 router.post("/add", validateToken, async (req, res) => {
   var request = new Request({ ...req.body });
   try {
-    await User.findOne({ id: req.authData.id }, (err, user) => {
-      request.user_Id = user._id;
-    });
+    await User.findOne(
+      { id: req.authData.id, typeUser: "Customer" },
+      (err, user) => {
+        request.user_Id = user._id;
+      }
+    );
 
     //Adding the new request to DB
     var newRequest = await request.save();
@@ -34,11 +37,16 @@ router.post("/add", validateToken, async (req, res) => {
       typeUser: "Driver",
       actif: true
     });
-    chooseRightDriver(
+
+    var BestDrivers = await chooseRightDriver(
       results,
       newRequest.pickup_address,
-      newRequest.delivery_address
+      newRequest.delivery_address,
+      newRequest.Shared
     );
+    newRequest.driver_id = BestDrivers[0]._id;
+    newRequest.State = "Pending";
+    newRequest.save();
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -48,13 +56,33 @@ router.post("/add", validateToken, async (req, res) => {
 router.get("/all", validateToken, async (req, res) => {
   let user_id;
   try {
-    await User.findOne({ id: req.authData.id }, (err, user) => {
-      user_id = user._id;
-    });
-    await Request.find({ user_Id: user_id }, (err, requests) => {
-      if (err) res.status(500).json({ message: err.message });
-      res.status(200).json(requests);
-    });
+    await User.findOne(
+      { id: req.authData.id, typeUser: "Customer" },
+      (err, user) => {
+        if (err) console.log(err);
+        user_id = user._id;
+      }
+    );
+    await Request.find(
+      { user_Id: user_id },
+      null,
+      { sort: { Date: -1 } },
+      (err, requests) => {
+        if (err) res.status(500).json({ message: err.message });
+        res.status(200).json(requests);
+      }
+    );
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.get("/requestDriver/:id", validateToken, async (req, res) => {
+  try {
+    var req = await Request.findById(req.params.id);
+
+    var driver = await User.findOne({ _id: req.driver_id, typeUser: "Driver" });
+    res.json(driver);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -64,7 +92,8 @@ router.get("/all", validateToken, async (req, res) => {
 const chooseRightDriver = async (
   listOfDrivers,
   pickupAddress,
-  deliveryAddress
+  deliveryAddress,
+  Shared
 ) => {
   //Calcucating for each driver the distance between his current locaton and the pickup address
   for (const driver of listOfDrivers) {
@@ -112,6 +141,12 @@ const chooseRightDriver = async (
   assignedDrivers.filter(driver =>
     driver.distBetweenDestAndDelivery < 2 ? 1 : -1
   );
+
+  var BestDriversForOrder;
+  if (Shared) BestDriversForOrder = [...assignedDrivers, ...freeDrivers];
+  else BestDriversForOrder = [...freeDrivers, ...assignedDrivers];
+
+  return BestDriversForOrder;
 };
 
 //Function that calculates the distance of the real path between two addresses

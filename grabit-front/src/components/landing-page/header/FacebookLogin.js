@@ -12,12 +12,6 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     justifyContent: "center"
   },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3)
-  },
   fbbutton: {
     width: "300px",
     height: "56px",
@@ -29,6 +23,15 @@ const useStyles = makeStyles(theme => ({
     backgroundRepeat: "no-repeat",
     backgroundPosition: "20px 10px",
     cursor: "pointer"
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: "none",
+    borderRadius: 4,
+    boxShadow: theme.shadows[5],
+    padding: 10,
+    textAlign: "center",
+    outline: "none"
   }
 }));
 export default function FacebookComponent(props) {
@@ -44,10 +47,13 @@ export default function FacebookComponent(props) {
       BackdropComponent={Backdrop}
       BackdropProps={{ timeout: 500 }}
     >
-      <Fade style={{ borderRadius: "4px" }} in={props.opened}>
+      <Fade className={classes.paper} in={props.opened}>
         {props.type === "SingIn" ? (
-          <div className={classes.paper}>
-            <Grid container spacing={3}>
+          <div>
+            <Grid container spacing={2}>
+              <Grid style={{ fontSize: 25 }} item xs={12}>
+                Welcom Back
+              </Grid>
               <Grid item xs={6}>
                 <h3>Sign in as Driver</h3>
                 <FacebookLogin

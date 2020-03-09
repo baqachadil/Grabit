@@ -1,7 +1,7 @@
 import { Route, Switch } from "react-router-dom";
 import React from "react";
 import Profile from "../../components/Dashboard/Profile/Profile";
-import Requests from "../../components/Dashboard/Requests";
+import Requests from "../../components/Dashboard/Requests/Requests";
 import Adress from "../../components/Dashboard/Adress";
 import FAQ from "../../components/Dashboard/FAQ";
 

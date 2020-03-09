@@ -12,14 +12,15 @@ const useStyles = makeStyles(theme => ({
     width: 255,
     marginLeft: 150,
     marginTop: 50,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    fontSize: 15
   },
   item: {
     padding: 20,
     wordSpacing: 10,
     cursor: "pointer",
     "&:hover": {
-      backgroundColor: "#F2F2F2"
+      backgroundColor: "#D6C1BD"
     }
   },
   info: {
@@ -61,21 +62,6 @@ export default function SideMenu({ currentUser }) {
   return (
     <div className={classes.root}>
       <Grid container>
-        <Grid item xs={12} className={classes.info}>
-          <Grid container justify="flex-start">
-            <Grid item xs={4}>
-              <img
-                src={currentUser?.image}
-                alt={currentUser?.Name}
-                className={classes.userImg}
-              />
-            </Grid>
-            <Grid style={{ paddingTop: 15 }} item xs={8}>
-              <span>{currentUser?.Name}</span>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} className={classes.line}></Grid>
         <Grid
           item
           xs={12}
@@ -87,9 +73,14 @@ export default function SideMenu({ currentUser }) {
             setCurrentPage("profile");
           }}
         >
-          <img alt="Path" src={Profile} className={classes.images} />
-          <span> </span>
-          <span>Profile</span>
+          <Grid container>
+            <Grid item xs={2}>
+              <img alt="Path" src={Profile} className={classes.images} />
+            </Grid>
+            <Grid item xs={3}>
+              <span>Profile</span>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid
           item
@@ -125,7 +116,7 @@ export default function SideMenu({ currentUser }) {
               <img alt="Path" src={Home} className={classes.images} />
             </Grid>
             <Grid item xs={3}>
-              <span>Adresse</span>
+              <span>Address</span>
             </Grid>
           </Grid>
         </Grid>

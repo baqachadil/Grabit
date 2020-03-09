@@ -32,7 +32,8 @@ const useStyles = makeStyles(theme => ({
     border: "none",
     borderRadius: 4,
     cursor: "pointer",
-    fontSize: 15
+    fontSize: 18,
+    outline: "none"
   },
   userImg: {
     borderRadius: "100%",
@@ -81,7 +82,7 @@ export default function NavBar({ currentUser, onLogOut, page, userType }) {
           </button>
         )}
       </Grid>
-      <Grid item style={{ paddingTop: "20px" }} xs={1}>
+      <Grid item style={{ paddingTop: 18, fontSize: 18 }} xs={1}>
         <span>{currentUser?.Name}</span>
       </Grid>
       <Grid item xs={1}>
