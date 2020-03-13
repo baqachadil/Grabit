@@ -1,0 +1,2 @@
+so since the last time, I fixed the things we talked about,
+I also worked on customer's requests list and the real time tracking.

@@ -6,6 +6,8 @@ const User = require("../Models/User");
 const validateToken = require("../Routes/TokenValidation");
 const axios = require("axios");
 
+require("../Socket/Socket");
+
 router.post("/add", validateToken, async (req, res) => {
   var request = new Request({ ...req.body });
   try {
@@ -63,26 +65,24 @@ router.get("/all", validateToken, async (req, res) => {
         user_id = user._id;
       }
     );
-    await Request.find(
-      { user_Id: user_id },
-      null,
-      { sort: { Date: -1 } },
-      (err, requests) => {
-        if (err) res.status(500).json({ message: err.message });
-        res.status(200).json(requests);
-      }
-    );
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+    let requests = await Request.find({ user_Id: user_id }, null, {
+      sort: { Date: -1 }
+    })
+      .lean()
+      .exec();
 
-router.get("/requestDriver/:id", validateToken, async (req, res) => {
-  try {
-    var req = await Request.findById(req.params.id);
+    for (let request of requests) {
+      var driver = await User.findOne({
+        _id: request.driver_id,
+        typeUser: "Driver"
+      });
+      request.driver_location = {
+        lat: driver.location.coordinates[0],
+        lng: driver.location.coordinates[1]
+      };
+    }
 
-    var driver = await User.findOne({ _id: req.driver_id, typeUser: "Driver" });
-    res.json(driver);
+    res.status(200).json(requests);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

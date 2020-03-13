@@ -5,6 +5,7 @@ body {
   max-width: 100%;
   padding-right: 0 !important;
   background-color: #f2f2f2;
+  overflow-y: scroll !important;
 }
 ::-webkit-scrollbar {
   width: 5px;

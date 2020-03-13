@@ -82,26 +82,29 @@ export default function SideMenu({ currentUser }) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          className={
-            currentPage === "requests" ? classes.selected : classes.item
-          }
-          onClick={() => {
-            history.push("requests");
-            setCurrentPage("requests");
-          }}
-        >
-          <Grid container>
-            <Grid item xs={2}>
-              <img alt="Path" src={Notif} className={classes.images} />
-            </Grid>
-            <Grid item xs={3}>
-              <span>Requests</span>
+
+        {currentUser?.typeUser === "Customer" && (
+          <Grid
+            item
+            xs={12}
+            className={
+              currentPage === "requests" ? classes.selected : classes.item
+            }
+            onClick={() => {
+              history.push("requests");
+              setCurrentPage("requests");
+            }}
+          >
+            <Grid container>
+              <Grid item xs={2}>
+                <img alt="Path" src={Notif} className={classes.images} />
+              </Grid>
+              <Grid item xs={3}>
+                <span>Requests</span>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        )}
         <Grid
           item
           xs={12}

@@ -549,18 +549,6 @@ export default function Request() {
                   <div style={{ color: "red" }}>{errors.orderPrice_error}</div>
                 )}
               </Grid>
-              {
-                <Grid item xs={12}>
-                  <hr />
-                  <strong style={{ marginLeft: 5 }}>
-                    Total:{" "}
-                    {(
-                      parseFloat(servicePrice) + parseFloat(orderPrice)
-                    ).toFixed(3)}{" "}
-                    MAD
-                  </strong>
-                </Grid>
-              }
             </Grid>
           </Grid>
           <Grid item xs={7}>
@@ -614,6 +602,15 @@ export default function Request() {
                   </p>
                   <p id="transition-modal-description">
                     Estimated duration for delivery : {duration}
+                  </p>
+                  <p id="transition-modal-description">
+                    <strong>
+                      Total cost :{" "}
+                      {(
+                        parseFloat(servicePrice) + parseFloat(orderPrice)
+                      ).toFixed(3)}
+                    </strong>{" "}
+                    MAD
                   </p>
                   <button className={classes.confirm} onClick={submit}>
                     Confirm

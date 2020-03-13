@@ -47,8 +47,8 @@ export default function Body() {
           Fast Delivery with <br /> tracking.
         </h1>
         <p>
-          Breast Augmentation Breast Enlargement Medical Tourism In The
-          Philippine
+          Delivering your order in less than One Hour ! <br />
+          Track your delivery in real time.
         </p>
       </Grid>
       <Grid item xs={6}>

@@ -13,7 +13,9 @@ export default function router({ currentUser }) {
         path="/dashboard/profile"
         render={() => <Profile currentUser={currentUser}></Profile>}
       />
-      <Route path="/dashboard/requests" component={Requests} />
+      {currentUser?.typeUser === "Customer" && (
+        <Route path="/dashboard/requests" component={Requests} />
+      )}
       <Route path="/dashboard/adress" component={Adress} />
       <Route path="/dashboard/faq" component={FAQ} />
     </Switch>

@@ -42,6 +42,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NavBar({ currentUser, onLogOut, page, userType }) {
+  userType === "Driver" && require("../../DriverSocket");
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);

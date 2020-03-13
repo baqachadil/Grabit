@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { makeStyles, Grid } from "@material-ui/core";
-import Map from "../../Request/Map";
-import delivery from "../../../assets/images/delivery.png";
-import pickup from "../../../assets/images/pickup.png";
-import driver from "../../../assets/images/grabitMarker.png";
+import GoogleMapReact from "google-map-react";
+import Marker from "./Marker";
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -34,49 +32,45 @@ const useStyles = makeStyles(theme => ({
 }));
 export default function ModalMap({ open, handleClose, addresses }) {
   const classes = useStyles();
+  const [center] = useState({ lat: 33.99647, lng: -6.84729 });
+  const [zoom] = useState(15);
+  const [show, setShow] = useState([false, false, false]);
 
-  const renderPolylines = (map, maps) => {
-    let image;
-    var bounds = new maps.LatLngBounds();
-    var infowindow = new maps.InfoWindow();
+  const getMapBounds = (map, maps, locations) => {
+    const bounds = new maps.LatLngBounds();
 
-    for (var i = 0; i < addresses.length; i++) {
-      i === 0
-        ? (image = delivery)
-        : i === 1
-        ? (image = pickup)
-        : (image = driver);
-      var marker = new maps.Marker({
-        position: addresses[i],
-        map: map,
-        icon: image
+    locations.forEach(location => {
+      bounds.extend(new maps.LatLng(location.lat, location.lng));
+    });
+    return bounds;
+  };
+
+  const bindResizeListener = (map, maps, bounds) => {
+    maps.event.addDomListener(map, "idle", () => {
+      maps.event.addDomListener(window, "resize", () => {
+        map.fitBounds(bounds);
       });
+    });
+  };
 
-      let info =
-        i === 0
-          ? "Delivery address"
-          : i === 1
-          ? "Pickup address"
-          : "Driver current location";
-      maps.event.addListener(
-        marker,
-        "mouseover",
-        (function(marker, i) {
-          return function() {
-            infowindow.setContent(info);
-            infowindow.open(map, marker);
-          };
-        })(marker, i)
-      );
-
-      marker.addListener("mouseout", function() {
-        infowindow.close();
-      });
-
-      marker.setMap(map);
-      bounds.extend(marker.position);
+  const apiIsLoaded = (map, maps, locations) => {
+    if (map) {
+      const bounds = getMapBounds(map, maps, locations);
+      map.fitBounds(bounds);
+      bindResizeListener(map, maps, bounds);
     }
-    map.fitBounds(bounds);
+  };
+
+  const handleOpenPop = i => {
+    let array = [...show];
+    array[i] = true;
+    setShow(array);
+  };
+
+  const handleClosePop = i => {
+    let array = [...show];
+    array[i] = false;
+    setShow(array);
   };
 
   return (
@@ -98,7 +92,30 @@ export default function ModalMap({ open, handleClose, addresses }) {
       <Fade className={classes.paper} in={open}>
         <div>
           <Grid container className={classes.map}>
-            <Map center={addresses[0]} renderPolylines={renderPolylines}></Map>
+            <GoogleMapReact
+              bootstrapURLKeys={{
+                key: "AIzaSyCL3qzgqg6P8crdHBcQMnOQo7KWFnOkpVs"
+              }}
+              zoom={zoom}
+              center={center}
+              yesIWantToUseGoogleMapApiInternals
+              onGoogleApiLoaded={({ map, maps }) =>
+                apiIsLoaded(map, maps, addresses)
+              }
+            >
+              {addresses.map((add, i) => (
+                <Marker
+                  lat={add.lat}
+                  lng={add.lng}
+                  type={i === 0 ? "delivery" : i === 1 ? "pickup" : "driver"}
+                  key={i}
+                  onMouseEnter={() => handleOpenPop(i)}
+                  onMouseLeave={() => handleClosePop(i)}
+                  show={show[i]}
+                />
+              ))}
+            </GoogleMapReact>
+            ;
           </Grid>
         </div>
       </Fade>

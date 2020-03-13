@@ -8,6 +8,8 @@ import Button from "@material-ui/core/Button";
 //import Moment from "moment";
 import RoomIcon from "@material-ui/icons/Room";
 import ModalMap from "./ModalMap";
+import io from "socket.io-client";
+const socket = io("http://localhost:2000");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,33 +55,19 @@ const useStyles = makeStyles(theme => ({
 
 export default function Requests() {
   const classes = useStyles();
-  const [RequestsList, setRequestList] = useState();
+  const [RequestsList, setRequestList] = useState([]);
   const [open, setOpen] = useState(false);
-  const [currentAddresses, setCurrentAdd] = useState(null);
+  const [currentAddresses, setCurrentAdd] = useState([]);
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleOpen = async i => {
-    let config = {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("JwtToken")
-      }
-    };
-
-    var driver = await axios.get(
-      `/requests/requestDriver/${RequestsList[i]._id}`,
-      config
-    );
-    console.log(driver.data);
     setCurrentAdd([
       RequestsList[i].delivery_address,
       RequestsList[i].pickup_address,
-      {
-        lat: driver.data.location.coordinates[0],
-        lng: driver.data.location.coordinates[1]
-      }
+      RequestsList[i].driver_location
     ]);
     setOpen(true);
   };
@@ -99,7 +87,28 @@ export default function Requests() {
       .catch(err => {
         console.log(err);
       });
-  }, [RequestsList]);
+
+    socket.on("connect", function() {
+      console.log("socket connected");
+    });
+
+    socket.on("notifiCustomer", data => {
+      setRequestList(current => {
+        for (var i = 0; i < current.length; i++) {
+          if (current[i].driver_id === data.driver_id) {
+            current[i].driver_location = data.coords;
+          }
+        }
+        return [...current];
+      });
+
+      setCurrentAdd(current => {
+        current[2] = data.coords;
+        return [...current];
+      });
+    });
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Grid container spacing={2} className={classes.root}>
@@ -146,8 +155,8 @@ export default function Requests() {
                 See in Map
               </Button>
               <ModalMap
-                addresses={currentAddresses !== null && currentAddresses}
                 open={open}
+                addresses={currentAddresses !== null ? currentAddresses : []}
                 handleClose={handleClose}
               ></ModalMap>
             </CardActions>
